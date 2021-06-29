@@ -44,7 +44,7 @@ export default {
             
         },
         incrementQuantity:function(item){
-            item.quantity += 1
+            item.quantity += +1
             this.updateCart()
         },
 

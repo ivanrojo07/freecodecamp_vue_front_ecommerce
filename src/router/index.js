@@ -4,6 +4,12 @@ import Product from '../views/Product.vue'
 import Category from '../views/Category.vue'
 import Search from '../views/Search.vue'
 import Cart from '../views/Cart.vue'
+import SignUp from '../views/SignUp.vue'
+import Login from '../views/Login.vue'
+import MyAccount from '../views/MyAccount.vue'
+import Checkout from '../views/Checkout.vue'
+import Success from '../views/Success.vue'
+import store from '../store'
 
 const routes = [
   {
@@ -38,6 +44,40 @@ const routes = [
     path:"/cart/",
     name:"Cart",
     component:Cart
+  },
+  {
+    path:"/signup/",
+    name:"SignUp",
+    component:SignUp
+  },
+  {
+    path:'/login/',
+    name:'Login',
+    component:Login
+  },
+  {
+    path:'/my-account/',
+    name:'MyAccount',
+    component:MyAccount,
+    meta:{
+      requireLogin:true
+    }
+  },
+  {
+    path:'/cart/checkout/',
+    name:'Checkout',
+    component:Checkout,
+    meta:{
+      requireLogin:true
+    }
+  },
+  {
+    path:'/cart/success',
+    name:"Success",
+    component:Success,
+    meta:{
+      requireLogin:true
+    }
   }
 
 ]
@@ -45,6 +85,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to,from,next)=>{
+  if(to.matched.some(record=>record.meta.requireLogin) && !store.state.isAuthenticated){
+    next({name:"Login",query:{to:to.path}});
+  }else{
+    next()
+  }
+  
 })
 
 export default router
